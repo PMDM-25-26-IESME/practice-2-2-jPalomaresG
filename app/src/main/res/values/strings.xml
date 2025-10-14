@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">vatCalculator</string>
+    <string name="app_name">Platilla</string>
+    <string name="app_title">VAT Calculator</string>
+    <string name="base_amount">Base Amount (€)</string>
+    <string name="vat_percentage">VAT Percentage (%)</string>
+    <string name="total_amount">Total: €%.2f</string>
 </resources>

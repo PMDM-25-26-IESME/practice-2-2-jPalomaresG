@@ -1,4 +1,4 @@
-package com.josue.vatcalculator
+package com.josue.platilla
 
 import org.junit.Test
 

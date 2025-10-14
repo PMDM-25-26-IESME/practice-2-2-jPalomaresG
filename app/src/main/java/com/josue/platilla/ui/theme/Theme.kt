@@ -1,4 +1,4 @@
-package com.josue.vatcalculator.ui.theme
+package com.josue.platilla.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -34,7 +34,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun VatCalculatorTheme(
+fun PlatillaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,

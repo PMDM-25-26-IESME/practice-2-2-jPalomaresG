@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    namespace = "com.josue.vatcalculator"
+    namespace = "com.josue.platilla"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.josue.vatcalculator"
-        minSdk = 24
+        applicationId = "com.josue.platilla"
+        minSdk = 21
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"

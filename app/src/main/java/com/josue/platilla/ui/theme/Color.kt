@@ -1,4 +1,4 @@
-package com.josue.vatcalculator.ui.theme
+package com.josue.platilla.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

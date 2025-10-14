@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "vatCalculator"
+rootProject.name = "Platilla"
 include(":app")
  
