@@ -1,6 +1,8 @@
 package com.josue.platilla.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.TextField
 import androidx.compose.material3.Text
@@ -9,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun EditField(
@@ -26,11 +29,16 @@ fun EditField(
         leadingIcon = {
             Icon(
                 painter = painterResource(id = iconRes),
-                contentDescription = label
+                contentDescription = label,
+                modifier = Modifier
+                    .size(28.dp)
+                    .padding(end = 4.dp)
             )
         },
         singleLine = true,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
     )
 }
