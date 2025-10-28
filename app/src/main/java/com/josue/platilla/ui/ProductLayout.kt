@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.josue.platilla.R
 import java.text.NumberFormat
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductLayout() {
 
@@ -28,34 +29,95 @@ fun ProductLayout() {
     val price = priceInput.toDoubleOrNull() ?: 0.0
     val vat = vatInput.toDoubleOrNull() ?: 0.0
     val total = price + (price * vat / 100)
-    val formattedTotal = String.format("%.2f", total) // ✅ Redondeado a 2 decimales
-
+    val formattedTotal = String.format("%.2f", total)
 
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    if (isLandscape) {
+    Scaffold(
+        topBar = { ProductTopBar() } // ✅ Barra superior personalizada
+    ) { innerPadding ->
 
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp)
-                .statusBarsPadding()
-                .safeDrawingPadding(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        if (isLandscape) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 24.dp)
+                    .statusBarsPadding()
+                    .safeDrawingPadding(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 16.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Text(
+                        text = stringResource(R.string.app_title),
+                        style = MaterialTheme.typography.displayLarge, // ✅ usa tipografía grande
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+
+                    EditField(
+                        label = stringResource(R.string.product_name),
+                        value = productName,
+                        onValueChanged = { productName = it },
+                        iconRes = R.drawable.product
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    EditField(
+                        label = stringResource(R.string.price),
+                        value = priceInput,
+                        onValueChanged = { priceInput = it },
+                        iconRes = R.drawable.money,
+                        keyboardType = KeyboardType.Number
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    EditField(
+                        label = stringResource(R.string.vat),
+                        value = vatInput,
+                        onValueChanged = { vatInput = it },
+                        iconRes = R.drawable.percent,
+                        keyboardType = KeyboardType.Number
+                    )
+                }
+
+                Text(
+                    text = stringResource(R.string.total_price, formattedTotal),
+                    style = MaterialTheme.typography.displayMedium, // ✅ tipografía media
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+        } else {
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 16.dp)
-                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .statusBarsPadding()
+                    .safeDrawingPadding()
+                    .padding(horizontal = 40.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = stringResource(R.string.app_title),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    style = MaterialTheme.typography.displayLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = 16.dp)
                 )
 
                 EditField(
@@ -65,7 +127,7 @@ fun ProductLayout() {
                     iconRes = R.drawable.product
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 EditField(
                     label = stringResource(R.string.price),
@@ -75,7 +137,7 @@ fun ProductLayout() {
                     keyboardType = KeyboardType.Number
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 EditField(
                     label = stringResource(R.string.vat),
@@ -84,72 +146,15 @@ fun ProductLayout() {
                     iconRes = R.drawable.percent,
                     keyboardType = KeyboardType.Number
                 )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Text(
+                    text = stringResource(R.string.total_price, formattedTotal),
+                    style = MaterialTheme.typography.displayMedium,
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
-
-            Text(
-                text = stringResource(R.string.total_price, formattedTotal),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.CenterVertically)
-            )
-        }
-    } else {
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .safeDrawingPadding()
-                .padding(horizontal = 40.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = stringResource(R.string.app_title),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(bottom = 16.dp)
-            )
-
-            EditField(
-                label = stringResource(R.string.product_name),
-                value = productName,
-                onValueChanged = { productName = it },
-                iconRes = R.drawable.product
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            EditField(
-                label = stringResource(R.string.price),
-                value = priceInput,
-                onValueChanged = { priceInput = it },
-                iconRes = R.drawable.money,
-                keyboardType = KeyboardType.Number
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            EditField(
-                label = stringResource(R.string.vat),
-                value = vatInput,
-                onValueChanged = { vatInput = it },
-                iconRes = R.drawable.percent,
-                keyboardType = KeyboardType.Number
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Text(
-                text = stringResource(R.string.total_price, formattedTotal),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
         }
     }
 }
