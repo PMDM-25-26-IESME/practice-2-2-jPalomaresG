@@ -1,4 +1,4 @@
-package com.josue.vatcalculator.ui.viewmodels
+package com.josue.platilla.ui.viewmodels
 
 data class VatState(
     val productName: String = "",

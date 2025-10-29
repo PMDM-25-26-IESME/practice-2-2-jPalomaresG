@@ -1,34 +1,42 @@
-package com.josue.vatcalculator.ui.viewmodels
+package com.josue.platilla.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.State
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 
 class VatViewModel : ViewModel() {
 
-    private val _uiState = mutableStateOf(VatState())
-    val uiState: State<VatState> = _uiState
+    private val _uiState = MutableStateFlow(VatState())
+    val uiState: StateFlow<VatState> = _uiState.asStateFlow()
 
-    fun onProductNameChanged(newValue: String) {
-        _uiState.value = _uiState.value.copy(productName = newValue)
+    fun onProductNameChanged(name: String) {
+        _uiState.value = _uiState.value.copy(productName = name)
     }
 
-    fun onPriceChanged(newValue: String) {
-        _uiState.value = _uiState.value.copy(priceInput = newValue)
+    fun onPriceChanged(price: String) {
+        _uiState.value = _uiState.value.copy(priceInput = price)
         calculateTotal()
     }
 
-    fun onVatChanged(newValue: String) {
-        _uiState.value = _uiState.value.copy(vatInput = newValue)
+    fun onVatChanged(vat: String) {
+        _uiState.value = _uiState.value.copy(vatInput = vat)
         calculateTotal()
     }
 
     private fun calculateTotal() {
-        val price = _uiState.value.priceInput.toDoubleOrNull() ?: 0.0
-        val vat = _uiState.value.vatInput.toDoubleOrNull() ?: 0.0
-        val total = price + (price * vat / 100)
-        val formattedTotal = NumberFormat.getCurrencyInstance().format(total)
-        _uiState.value = _uiState.value.copy(totalFormatted = formattedTotal)
+        viewModelScope.launch {
+            val price = _uiState.value.priceInput.toDoubleOrNull() ?: 0.0
+            val vat = _uiState.value.vatInput.toDoubleOrNull() ?: 0.0
+            val total = price * (1 + vat / 100)
+            val formattedTotal = NumberFormat.getCurrencyInstance().format(total)
+
+            _uiState.value = _uiState.value.copy(
+                totalFormatted = formattedTotal
+            )
+        }
     }
 }

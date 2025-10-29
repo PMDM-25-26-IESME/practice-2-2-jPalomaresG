@@ -5,8 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -14,21 +13,16 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.josue.platilla.R
-import java.text.NumberFormat
+import com.josue.platilla.ui.viewmodels.VatViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductLayout() {
-    var productName by rememberSaveable { mutableStateOf("") }
-    var priceInput by rememberSaveable { mutableStateOf("") }
-    var vatInput by rememberSaveable { mutableStateOf("") }
-
-    val price = priceInput.toDoubleOrNull() ?: 0.0
-    val vat = vatInput.toDoubleOrNull() ?: 0.0
-    val total = price + (price * vat / 100)
-    val formattedTotal = NumberFormat.getCurrencyInstance().format(total)
-
+fun ProductLayout(
+    vatViewModel: VatViewModel = viewModel()
+) {
+    val uiState = vatViewModel.uiState.value
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -61,8 +55,8 @@ fun ProductLayout() {
 
                     EditField(
                         label = stringResource(R.string.product_name),
-                        value = productName,
-                        onValueChanged = { productName = it },
+                        value = uiState.productName,
+                        onValueChanged = { vatViewModel.onProductNameChanged(it) },
                         iconRes = R.drawable.product
                     )
 
@@ -70,8 +64,8 @@ fun ProductLayout() {
 
                     EditField(
                         label = stringResource(R.string.price),
-                        value = priceInput,
-                        onValueChanged = { priceInput = it },
+                        value = uiState.priceInput,
+                        onValueChanged = { vatViewModel.onPriceChanged(it) },
                         iconRes = R.drawable.money,
                         keyboardType = KeyboardType.Number
                     )
@@ -80,15 +74,15 @@ fun ProductLayout() {
 
                     EditField(
                         label = stringResource(R.string.vat),
-                        value = vatInput,
-                        onValueChanged = { vatInput = it },
+                        value = uiState.vatInput,
+                        onValueChanged = { vatViewModel.onVatChanged(it) },
                         iconRes = R.drawable.percent,
                         keyboardType = KeyboardType.Number
                     )
                 }
 
                 Text(
-                    text = stringResource(R.string.total_price, formattedTotal),
+                    text = stringResource(R.string.total_price, uiState.totalFormatted),
                     style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
@@ -117,8 +111,8 @@ fun ProductLayout() {
 
                 EditField(
                     label = stringResource(R.string.product_name),
-                    value = productName,
-                    onValueChanged = { productName = it },
+                    value = uiState.productName,
+                    onValueChanged = { vatViewModel.onProductNameChanged(it) },
                     iconRes = R.drawable.product
                 )
 
@@ -126,8 +120,8 @@ fun ProductLayout() {
 
                 EditField(
                     label = stringResource(R.string.price),
-                    value = priceInput,
-                    onValueChanged = { priceInput = it },
+                    value = uiState.priceInput,
+                    onValueChanged = { vatViewModel.onPriceChanged(it) },
                     iconRes = R.drawable.money,
                     keyboardType = KeyboardType.Number
                 )
@@ -136,8 +130,8 @@ fun ProductLayout() {
 
                 EditField(
                     label = stringResource(R.string.vat),
-                    value = vatInput,
-                    onValueChanged = { vatInput = it },
+                    value = uiState.vatInput,
+                    onValueChanged = { vatViewModel.onVatChanged(it) },
                     iconRes = R.drawable.percent,
                     keyboardType = KeyboardType.Number
                 )
@@ -145,7 +139,7 @@ fun ProductLayout() {
                 Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_large)))
 
                 Text(
-                    text = stringResource(R.string.total_price, formattedTotal),
+                    text = stringResource(R.string.total_price, uiState.totalFormatted),
                     style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.secondary
                 )
