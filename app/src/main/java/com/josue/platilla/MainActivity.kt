@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.josue.platilla.ui.ProductLayout
 import com.josue.platilla.ui.theme.PlatillaTheme
+import com.josue.platilla.ui.ProductLayout
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +18,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-

@@ -10,18 +10,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.josue.platilla.R
 import java.text.NumberFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductLayout() {
-
     var productName by rememberSaveable { mutableStateOf("") }
     var priceInput by rememberSaveable { mutableStateOf("") }
     var vatInput by rememberSaveable { mutableStateOf("") }
@@ -29,21 +27,20 @@ fun ProductLayout() {
     val price = priceInput.toDoubleOrNull() ?: 0.0
     val vat = vatInput.toDoubleOrNull() ?: 0.0
     val total = price + (price * vat / 100)
-    val formattedTotal = String.format("%.2f", total)
+    val formattedTotal = NumberFormat.getCurrencyInstance().format(total)
 
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     Scaffold(
-        topBar = { ProductTopBar() } // ✅ Barra superior personalizada
+        topBar = { ProductTopBar() }
     ) { innerPadding ->
-
         if (isLandscape) {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = dimensionResource(R.dimen.padding_large))
                     .statusBarsPadding()
                     .safeDrawingPadding(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -52,14 +49,14 @@ fun ProductLayout() {
                 Column(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 16.dp)
+                        .padding(end = dimensionResource(R.dimen.padding_medium))
                         .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        text = stringResource(R.string.app_title),
-                        style = MaterialTheme.typography.displayLarge, // ✅ usa tipografía grande
+                        text = stringResource(R.string.vat_calculator_title),
+                        style = MaterialTheme.typography.displayLarge,
                         color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_medium))
                     )
 
                     EditField(
@@ -69,7 +66,7 @@ fun ProductLayout() {
                         iconRes = R.drawable.product
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
 
                     EditField(
                         label = stringResource(R.string.price),
@@ -79,7 +76,7 @@ fun ProductLayout() {
                         keyboardType = KeyboardType.Number
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
 
                     EditField(
                         label = stringResource(R.string.vat),
@@ -92,11 +89,9 @@ fun ProductLayout() {
 
                 Text(
                     text = stringResource(R.string.total_price, formattedTotal),
-                    style = MaterialTheme.typography.displayMedium, // ✅ tipografía media
+                    style = MaterialTheme.typography.displayMedium,
                     color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.CenterVertically)
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
                 )
             }
         } else {
@@ -106,18 +101,18 @@ fun ProductLayout() {
                     .padding(innerPadding)
                     .statusBarsPadding()
                     .safeDrawingPadding()
-                    .padding(horizontal = 40.dp)
+                    .padding(horizontal = dimensionResource(R.dimen.padding_large))
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = stringResource(R.string.app_title),
+                    text = stringResource(R.string.vat_calculator_title),
                     style = MaterialTheme.typography.displayLarge,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .align(Alignment.Start)
-                        .padding(bottom = 16.dp)
+                        .padding(bottom = dimensionResource(R.dimen.padding_medium))
                 )
 
                 EditField(
@@ -127,7 +122,7 @@ fun ProductLayout() {
                     iconRes = R.drawable.product
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
 
                 EditField(
                     label = stringResource(R.string.price),
@@ -137,7 +132,7 @@ fun ProductLayout() {
                     keyboardType = KeyboardType.Number
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
 
                 EditField(
                     label = stringResource(R.string.vat),
@@ -147,7 +142,7 @@ fun ProductLayout() {
                     keyboardType = KeyboardType.Number
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_large)))
 
                 Text(
                     text = stringResource(R.string.total_price, formattedTotal),
@@ -162,5 +157,15 @@ fun ProductLayout() {
 @Preview(showBackground = true)
 @Composable
 fun ProductLayoutPreview() {
-    ProductLayout()
+    com.josue.platilla.ui.theme.PlatillaTheme {
+        ProductLayout()
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ProductLayoutDarkPreview() {
+    com.josue.platilla.ui.theme.PlatillaTheme {
+        ProductLayout()
+    }
 }
