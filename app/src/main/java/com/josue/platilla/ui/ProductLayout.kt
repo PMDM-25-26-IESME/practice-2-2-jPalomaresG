@@ -6,6 +6,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -22,7 +25,9 @@ import com.josue.platilla.ui.viewmodels.VatViewModel
 fun ProductLayout(
     vatViewModel: VatViewModel = viewModel()
 ) {
-    val uiState = vatViewModel.uiState.value
+
+    val uiState by vatViewModel.uiState.collectAsState()
+
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
